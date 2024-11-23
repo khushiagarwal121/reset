@@ -1,0 +1,25 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
+    "@mdi/font": "^7.4.47",
+    "axios": "^1.7.7",
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/vuetify": "^1.12.3",
+    "axios": "^1.7.7",
+    "nuxt": "^3.13.0",
+    "vue": "latest",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vuetify": "^3.7.3",
+    "vuex": "^4.0.2"
+  }
+}

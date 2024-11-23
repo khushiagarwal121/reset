@@ -1,0 +1,93 @@
+"use strict";
+
+const { v4: uuidv4 } = require("uuid");
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    const categories = [
+      "Appetizers",
+      "Main Course",
+      "Desserts",
+      "Beverages",
+      "Salads",
+      "Soups",
+      "Snacks",
+      "Seafood",
+      "Grilled Items",
+      "Vegan Options",
+      "Breakfast",
+      "Brunch",
+      "Pasta",
+      "Pizza",
+      "Burgers",
+      "Sandwiches",
+      "Barbecue",
+      "Street Food",
+      "Healthy Options",
+      "Gluten-Free",
+      "Asian Cuisine",
+      "Indian Cuisine",
+      "Mediterranean",
+      "Mexican Cuisine",
+      "Italian Cuisine",
+      "French Cuisine",
+      "Japanese Cuisine",
+      "Korean Cuisine",
+      "Thai Cuisine",
+      "Chinese Cuisine",
+      "Ice Cream",
+      "Pastries",
+      "Cocktails",
+      "Mocktails",
+      "Kids' Menu",
+      "Seasonal Specials",
+      "Comfort Food",
+      "Fusion Cuisine",
+      "Dim Sum",
+      "Noodles",
+      "Steak",
+      "Tacos",
+      "Sushi",
+      "Wraps",
+      "Cheese Platters",
+      "Dosa",
+      "Idli",
+      "Samosa",
+      "Chaat",
+      "Biryani",
+      "Tandoori",
+      "Roti",
+      "Paratha",
+      "Paneer Dishes",
+      "Chow Mein",
+      "Spring Rolls",
+      "Fried Rice",
+      "Shakes",
+      "Hot Drinks",
+      "Cold Drinks",
+      "Cakes",
+      "Brownies",
+      "Pav Bhaji",
+      "Momos",
+      "Waffles",
+      "Crepes",
+      "Nachos",
+      "Quesadillas",
+      "Falafel",
+      "Kebabs",
+    ];
+
+    const categoryData = categories.map((name) => ({
+      uuid: uuidv4(),
+      name,
+      created_at: new Date(),
+      updated_at: new Date(),
+    }));
+
+    await queryInterface.bulkInsert("categories", categoryData, {});
+  },
+
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkDelete("categories", null, {});
+  },
+};

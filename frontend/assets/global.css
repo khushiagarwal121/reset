@@ -1,0 +1,44 @@
+.custom-link {
+  padding: 0 15px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+/* Change text color for selected button */
+.custom-link.active {
+  color: #e53935;
+}
+
+/* Change text color for hover state */
+.custom-link:hover {
+  color: #e53935;
+}
+
+.custom-list-item-title {
+  letter-spacing: 1px;
+}
+
+.custom-list-item:hover {
+  background-color: #e53935;
+
+  color: white;
+}
+
+.logo {
+  transition: transform 0.3s ease-in-out;
+}
+
+.logo:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.switch-role {
+  font-size: 0.75rem;
+  margin-left: 16px;
+  letter-spacing: 1px;
+}
+
+.switch-list {
+  background: rgb(244, 243, 243);
+}
