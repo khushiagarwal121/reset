@@ -3,11 +3,10 @@
     <!-- top banner  -->
     <Banner />
 
-    <!-- slidbar for dishes  -->
+    <!-- slidebar for dishes  -->
     <div
       width="100%"
-      class="hello mt-7 d-flex flex-column align-center justify-center"
-      color="primary"
+      class="mt-7 d-flex flex-column align-center justify-center"
     >
       <div class="text-h5 mb-5 mt-4 font-weight-bold">
         Eat what makes you happy
@@ -18,8 +17,7 @@
     <!-- slidebar for top brands   -->
     <div
       width="100%"
-      class="hello mt-7 d-flex flex-column align-center justify-center"
-      color="primary"
+      class="mt-7 d-flex flex-column align-center justify-center"
     >
       <div class="text-h5 mb-5 mt-4 font-weight-bold">Top brands</div>
       <SlideBar :items="topBrands" />
@@ -51,6 +49,9 @@ import SlideBar from "./SlideBar.vue";
 
 export default {
   components: { Banner, RestaurantCard, SlideBar },
+  mounted() {
+    this.fetchCategories();
+  },
   data() {
     return {
       dishes: [
@@ -91,40 +92,39 @@ export default {
           title: "Pizza",
         },
       ],
-
       topBrands: [
         {
-          title: "McDonald's",
+          name: "McDonald's",
         },
         {
-          title: "KFC",
+          name: "KFC",
         },
         {
-          title: "Pizza Hut",
+          name: "Pizza Hut",
         },
         {
-          title: "Subway",
+          name: "Subway",
         },
         {
-          title: "Domino's Pizza",
+          name: "Domino's Pizza",
         },
         {
-          title: "Starbucks",
+          name: "Starbucks",
         },
         {
-          title: "Burger King",
+          name: "Burger King",
         },
         {
-          title: "Dunkin'",
+          name: "Dunkin'",
         },
         {
-          title: "Chipotle",
+          name: "Chipotle",
         },
         {
-          title: "Panda Express",
+          name: "Panda Express",
         },
         {
-          title: "Taco Bell",
+          name: "Taco Bell",
         },
       ],
       restaurants: [
@@ -142,6 +142,17 @@ export default {
         { id: 12, name: "Pasta Palace" },
       ],
     };
+  },
+  methods: {
+    async fetchCategories() {
+      await this.$store.dispatch("menu/fetchAvailableCategories");
+      this.dishes = this.allAvailableCategories;
+    },
+  },
+  computed: {
+    allAvailableCategories() {
+      return this.$store.getters["menu/allAvailableCategories"];
+    },
   },
 };
 </script>

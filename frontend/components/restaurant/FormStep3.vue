@@ -20,7 +20,7 @@
         :rules="[fssaiValidation]"
       ></v-text-field>
 
-      <!-- fssai valid_from and valid_to date input -->
+      <!-- fssai valid_from date input -->
       <div class="d-flex">
         <v-date-input
           v-model="localFormData.fssai_valid_from"
@@ -30,8 +30,14 @@
           variant="outlined"
           label="FSSAI Valid From*"
           :rules="requiredValidation('FSSAI Valid From')"
+          :min="
+            new Date(new Date().setFullYear(new Date().getFullYear() - 6))
+              .toISOString()
+              .split('T')[0]
+          "
+          :max="new Date().toISOString().split('T')[0]"
         ></v-date-input>
-
+        <!-- fssai valid_to date input  -->
         <v-date-input
           v-model="localFormData.fssai_valid_to"
           width="auto"
@@ -40,6 +46,12 @@
           variant="outlined"
           label="FSSAI Valid To*"
           :rules="requiredValidation('FSSAI Valid To')"
+          :min="new Date().toISOString().split('T')[0]"
+          :max="
+            new Date(new Date().setFullYear(new Date().getFullYear() + 6))
+              .toISOString()
+              .split('T')[0]
+          "
         ></v-date-input>
       </div>
       <p class="sub-heading">Upload FSSAI Certificate*</p>

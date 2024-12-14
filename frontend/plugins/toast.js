@@ -4,7 +4,7 @@ import { POSITION } from "vue-toastification";
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(Toast, {
     position: POSITION.TOP_RIGHT,
-    timeout: 3000,
+    timeout: 1500,
     closeOnClick: true,
     pauseOnFocusLoss: true,
     pauseOnHover: true,

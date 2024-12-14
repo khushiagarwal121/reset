@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   // Define allowed routes for each user role
   const roleRoutes = {
     customer: ["/customer/dashboard"],
-    restaurant: ["/restaurant/dashboard"],
+    restaurant: ["/restaurant/dashboard", "/restaurant/menu-cuisine"],
     delivery_partner: ["/delivery-partner/dashboard"],
   };
 

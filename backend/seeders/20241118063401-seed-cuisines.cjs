@@ -5,6 +5,15 @@ const { v4: uuidv4 } = require("uuid");
 module.exports = {
   async up(queryInterface, Sequelize) {
     const cuisines = [
+      "Asian Cuisine",
+      "Indian Cuisine",
+      "Mexican Cuisine",
+      "Italian Cuisine",
+      "French Cuisine",
+      "Japanese Cuisine",
+      "Korean Cuisine",
+      "Thai Cuisine",
+      "Chinese Cuisine",
       "Chinese",
       "North Indian",
       "Fast Food",

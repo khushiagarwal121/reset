@@ -9,12 +9,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   // Public routes that don't require authentication
-  const publicRoutes = [
-    "/",
-    "/reset-password/:token",
-    "/search",
-    "/restaurant/menu-cuisine",
-  ];
+  const publicRoutes = ["/", "/reset-password/:token", "/search"];
 
   // // Allow public routes to proceed without authentication
   if (

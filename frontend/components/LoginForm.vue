@@ -136,7 +136,8 @@ const loading = computed(() => store.state.auth.loading);
 const emailRules = [
   (v) => !!v || "Email is required",
   (v) =>
-    /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(v) || "Email must be valid",
+    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v) ||
+    "Email must be valid",
 ];
 
 const passwordRules = [(v) => !!v || "Password is required"];
@@ -193,7 +194,7 @@ const handleSubmit = async () => {
     try {
       // Dispatch the loginUser action in the Vuex store
       await store.dispatch("auth/loginUser", {
-        email: email.value,
+        email: email.value.toLowerCase(),
         password: password.value,
         role: role_name.value,
       });

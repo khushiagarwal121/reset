@@ -24,7 +24,7 @@ import {
 } from "./authSchema.js";
 import { validateRequest } from "../../middlewares/validationMiddleware.js";
 import { authenticate } from "../../middlewares/authMiddleware.js";
-import uploadFilesMiddleware from "../../middlewares/uploadFilesMiddleware.js";
+import { uploadFiles } from "../../middlewares/uploadMiddleware.js";
 
 const router = Router();
 
@@ -36,7 +36,7 @@ router
 router.route("/google/callback").get(googleAuthCallback, googleAuthSuccess);
 router
   .route("/register")
-  .post(uploadFilesMiddleware, validateRequest(signupSchema), signup);
+  .post(uploadFiles, validateRequest(signupSchema), signup);
 router
   .route("/checkUser")
   .post(validateRequest(checkUserExistenceSchema), checkUser);

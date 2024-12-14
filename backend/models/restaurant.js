@@ -27,7 +27,10 @@ export default (sequelize, DataTypes) => {
         foreignKey: "updated_by",
         as: "updater",
       });
-      Restaurant.hasMany(models.Dish);
+      Restaurant.hasMany(models.Dish, {
+        foreignKey: "restaurant_uuid",
+        as: "dishes",
+      });
       Restaurant.belongsToMany(models.Cuisine, {
         through: models.RestaurantCuisine,
         foreignKey: "restaurant_uuid", // Foreign key in RestaurantCusine tabel

@@ -23,6 +23,9 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      image: {
+        type: DataTypes.STRING,
+      },
       created_by: {
         type: DataTypes.UUID,
         allowNull: true,

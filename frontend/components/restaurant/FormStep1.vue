@@ -100,6 +100,7 @@
           v-model="localFormData.pincode"
           :rules="pincodeRules"
           @input="handlepincode"
+          maxLength="6"
         ></v-text-field>
       </div>
       <div class="form-row">
@@ -166,7 +167,6 @@ const map = ref(null);
 const mapComponent = ref(null);
 let localFormData = ref({ ...props.formData });
 let marker = ref(null);
-
 
 const pincodeRules = [
   (v) => !!v || "Pin code is required",

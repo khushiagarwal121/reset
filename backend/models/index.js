@@ -11,8 +11,7 @@ import RestaurantDocument from "./restaurant_document.js";
 import DeliveryPartner from "./delivery_partner.js";
 import Cuisine from "./cuisine.js";
 import Category from "./category.js";
-import Unit from "./unit.js";
-import RestaurantCuisine from "./restaurant_cuisine.js"
+import RestaurantCuisine from "./restaurant_cuisine.js";
 import Dish from "./dish.js";
 import DishVariant from "./dish_variant.js";
 
@@ -46,13 +45,11 @@ db.RestaurantOperationalStatus = RestaurantOperationalStatus(
 db.RestaurantDocument = RestaurantDocument(sequelize, DataTypes);
 db.DeliveryPartnerDocument = DeliveryPartnerDocument(sequelize, DataTypes);
 db.DeliveryPartner = DeliveryPartner(sequelize, DataTypes);
-db.Cuisine=Cuisine(sequelize,DataTypes)
+db.Cuisine = Cuisine(sequelize, DataTypes);
 db.Category = Category(sequelize, DataTypes);
-db.Unit = Unit(sequelize, DataTypes);
 db.RestaurantCuisine = RestaurantCuisine(sequelize, DataTypes);
 db.Dish = Dish(sequelize, DataTypes);
 db.DishVariant = DishVariant(sequelize, DataTypes);
-
 
 db.User.associate(db);
 db.Role.associate(db);
@@ -63,13 +60,11 @@ db.Restaurant.associate(db);
 db.RestaurantDocument.associate(db);
 db.DeliveryPartner.associate(db);
 db.DeliveryPartnerDocument.associate(db);
-db.Cuisine.associate(db)
+db.Cuisine.associate(db);
 db.Category.associate(db);
-db.Unit.associate(db);
 db.RestaurantCuisine.associate(db);
 db.Dish.associate(db);
 db.DishVariant.associate(db);
-
 
 const connectDB = async () => {
   try {

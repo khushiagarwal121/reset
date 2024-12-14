@@ -27,7 +27,7 @@ module.exports = {
       created_by: {
         type: Sequelize.UUID,
         references: {
-          model: "restaurants", // Name of the restaurants table
+          model: "users", // Name of the restaurants table
           key: "uuid", // Primary key in the restaurants table
         },
         allowNull: true, // Can be null
@@ -35,7 +35,7 @@ module.exports = {
       updated_by: {
         type: Sequelize.UUID,
         references: {
-          model: "restaurants", // Name of the restaurants table
+          model: "users", // Name of the restaurants table
           key: "uuid", // Primary key in the restaurants table
         },
         allowNull: true, // Can be null

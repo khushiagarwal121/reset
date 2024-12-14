@@ -3,7 +3,7 @@ import ApiError from "../utils/apiError.js";
 import upload from "./multerConfig.js";
 import multer from "multer";
 
-const uploadFilesMiddleware = (req, res, next) => {
+const uploadFiles = (req, res, next) => {
   upload.fields([
     { name: "fssai_certificate", maxCount: 1 },
     { name: "gst_certificate", maxCount: 1 },
@@ -29,4 +29,27 @@ const uploadFilesMiddleware = (req, res, next) => {
   });
 };
 
-export default uploadFilesMiddleware;
+const uploadDishImage = (req, res, next) => {
+  upload.single("image")(req, res, (err) => {
+    if (err) {
+      // Handle Multer error
+      console.log(err);
+
+      if (err instanceof multer.MulterError) {
+        return res.status(400).json({ error: err.message });
+      }
+      // Handle custom errors (e.g., file type validation)
+      if (err instanceof ApiError) {
+        return res.status(err.statusCode).json({ error: err.message });
+      }
+      // Handle any other errors
+      return res.status(500).json({ error: "An unexpected error occurred." });
+    }
+
+    // req.body.dish = JSON.parse(req.body.dish);
+
+    next();
+  });
+};
+
+export { uploadFiles, uploadDishImage };

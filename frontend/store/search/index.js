@@ -6,8 +6,10 @@ export default {
   namespaced: true,
   state() {
     return {
-      selectedCuisines: [],
-      savedCuisines: [],
+      currentLocation: null,
+      autoCompleteResults: [],
+      currentCity: null,
+      autoCompleteDishResults: [],
     };
   },
   mutations,

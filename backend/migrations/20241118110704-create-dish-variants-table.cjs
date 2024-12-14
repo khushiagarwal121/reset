@@ -9,14 +9,6 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.UUIDV4, // Automatically generate a UUID
       },
-      unit_uuid: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: "units",
-          key: "uuid",
-        },
-      },
       dish_uuid: {
         type: Sequelize.UUID,
         allowNull: false,
@@ -24,15 +16,25 @@ module.exports = {
           model: "dishes",
           key: "uuid",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      name: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
       },
       price: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
+      id_default: {
+        type: Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
+      },
       is_available: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true, // Items are available by default
+        defaultValue: true,
       },
       created_at: {
         type: Sequelize.DATE,

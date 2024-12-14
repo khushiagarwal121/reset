@@ -3,11 +3,10 @@ import { Model } from "sequelize"; // Import Model and DataTypes from sequelize
 export default (sequelize, DataTypes) => {
   class DishVariant extends Model {
     static associate(models) {
-      DishVariant.belongsTo(models.Unit, {
-        foreignKey: "unit_uuid",
-      });
       DishVariant.belongsTo(models.Dish, {
         foreignKey: "dish_uuid",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
     }
   }
@@ -21,14 +20,6 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: DataTypes.UUIDV4, // Automatically generate a UUID
       },
-      unit_uuid: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-          model: "units",
-          key: "uuid",
-        },
-      },
       dish_uuid: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -36,15 +27,25 @@ export default (sequelize, DataTypes) => {
           model: "dishes",
           key: "uuid",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
       },
       price: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
-      is_available: {
+      is_default: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: true, // Items are available by default
+        defaultValue: false,
+      },
+      is_available: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
       created_by: {
         type: DataTypes.UUID,

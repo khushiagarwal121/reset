@@ -1,9 +1,10 @@
 const respondOk = (res, result = {}) => {
-  res.status(200).send({ ...result, status: "Success" });
+  res.status(200).send({ status: "Success", ...result });
 };
 
 const respondError = (res, { statusCode, message }) => {
   res.status(statusCode).send({
+    status: "Failed",
     message,
   });
 };

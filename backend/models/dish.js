@@ -3,15 +3,15 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Dish extends Model {
     static associate(models) {
-      Dish.belongsToMany(models.Unit, {
-        through: models.DishVariant,
-        foreignKey: "dish_uuid", // Foreign key in DishVariant
-        otherKey: "unit_uuid", // Other key in DishVariant
+      Dish.hasMany(models.DishVariant, {
+        foreignKey: "dish_uuid",
         as: "variants",
       });
       Dish.belongsTo(models.Restaurant, {
         foreignKey: "restaurant_uuid",
         as: "restaurant",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
       Dish.belongsTo(models.Category, {
         foreignKey: "category_uuid",
@@ -34,6 +34,8 @@ export default (sequelize, DataTypes) => {
           model: "restaurants",
           key: "uuid",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       category_uuid: {
         type: DataTypes.UUID,
@@ -47,13 +49,9 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      price: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-      },
       image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       details: {
         type: DataTypes.STRING,
@@ -70,10 +68,6 @@ export default (sequelize, DataTypes) => {
       is_available: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
-      },
-      has_variant: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
       },
       is_jain: {
         type: DataTypes.BOOLEAN,

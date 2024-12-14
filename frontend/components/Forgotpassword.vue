@@ -94,7 +94,8 @@ const isFormValid = computed(() => {
 const emailRules = [
   (v) => !!v || "Email is required",
   (v) =>
-    /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(v) || "Email must be valid",
+    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v) ||
+    "Email must be valid",
 ];
 
 // Methods
@@ -115,7 +116,7 @@ const handleSubmit = async () => {
       return;
     }
     // Dispatch the "forgotPassword" action in the Vuex store
-    await store.dispatch("auth/forgotPassword", email.value);
+    await store.dispatch("auth/forgotPassword", email.value.toLowerCase());
     resetSuccess.value = true;
     toast.success("Reset password link sent to your email.", {
       autoClose: 2000,

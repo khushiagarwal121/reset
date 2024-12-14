@@ -62,7 +62,7 @@
           <v-text-field
             class="mt-2"
             v-model="email"
-            label="Email"
+            label="Email*"
             type="email"
             variant="outlined"
             required
@@ -72,7 +72,7 @@
           <v-text-field
             class="mt-2"
             v-model="password"
-            label="Password"
+            label="Password*"
             variant="outlined"
             :type="showPassword ? 'text' : 'password'"
             required
@@ -84,7 +84,7 @@
           <v-date-input
             class="mt-2"
             v-model="date_of_birth"
-            label="Date of Birth"
+            label="Date of Birth*"
             variant="outlined"
             required
             prepend-icon=""
@@ -196,9 +196,11 @@ const emailRules = computed(() => {
   return [
     (v) => !!v || "Email is required",
     (v) =>
-      /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(v) || "Email must be valid",
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v) ||
+      "Email must be valid",
   ];
 });
+
 const passwordRules = computed(() => {
   return [
     (v) => !!v || "Password is required",
@@ -291,7 +293,7 @@ const submitForm = async () => {
   try {
     const userData = {
       first_name: firstName.value,
-      email: email.value,
+      email: email.value.toLowerCase(), // Convert to lowercase here
       country_code: countryCode.value,
       phone_number: phoneNumber.value,
       password: password.value,
@@ -303,7 +305,7 @@ const submitForm = async () => {
     if (role_name.value === "customer") {
       await store.dispatch("auth/registerUser", userData);
       await store.dispatch("auth/loginUser", {
-        email: email.value,
+        email: email.value.toLowerCase(), // Ensure login also uses lowercase
         password: password.value,
         role: role_name.value,
       });

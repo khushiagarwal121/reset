@@ -24,6 +24,14 @@ export const useApi = () => {
     },
   });
 
-  // Return both Axios instances for different types of requests
-  return { api, formApi };
+  // axios instance for external API's
+  const externalApi = axios.create({
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    withCredentials: false,
+  });
+
+  return { api, formApi, externalApi };
 };

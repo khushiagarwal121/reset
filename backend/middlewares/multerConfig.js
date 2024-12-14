@@ -13,8 +13,8 @@ const storage = multer.diskStorage({
     cb(null, "uploads/"); // Define your storage path
   },
   filename: (req, file, cb) => {
-    // if (typeof req.body.other_details == "string")
-    //   req.body.other_details = JSON.parse(req.body.other_details);
+    if (typeof req.body.other_details == "string")
+      req.body.other_details = JSON.parse(req.body.other_details);
     const uniqueSuffix = uuidv4();
     const extension = path.extname(file.originalname);
     cb(null, `${uniqueSuffix}${extension}`);

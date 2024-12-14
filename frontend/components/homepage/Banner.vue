@@ -18,16 +18,20 @@
           </p>
 
           <!-- Search Bar -->
-          <v-text-field
-            label="Search here for your favourite food.."
-            placeholder=""
-            clearable
-            variant="solo"
+          <v-combobox
             v-model="searchQuery"
+            label="Search here for your favourite food.."
+            variant="solo"
+            clearable
+            :items="autoCompleteDishResults"
+            @input="debouncedDishFetchSuggestions"
             @click:append-inner="redirectToSearch"
             @keyup.enter="redirectToSearch"
+            item-title="name"
+            item-value="uuid"
             append-inner-icon="mdi-magnify"
-          ></v-text-field>
+            :open-on-focus="true" 
+          />
         </v-col>
       </v-row>
     </v-img>
@@ -39,15 +43,32 @@ import banner from "@/assets/banner2.jpg";
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 const display = useDisplay();
-const searchQuery = ref();
 const router = useRouter();
+const store = useStore();
+
+const searchQuery = ref("");
+const autoCompleteDishResults = ref([]);
 
 // Computed property for conditional classes
 const conditionalClasses = computed(() =>
   display.smAndUp ? "text-h3" : "text-h5"
 );
+
+// Debounced method to fetch dish suggestions
+const fetchDishSuggestions = async () => {
+  if (searchQuery.value.trim() !== "") {
+    await store.dispatch("search/fetchDishSuggestions", searchQuery.value);
+    autoCompleteDishResults.value = store.getters["search/getAutoCompleteDishResults"];
+  } else {
+    autoCompleteDishResults.value = [];
+  }
+};
+
+// Debounced version of the fetchDishSuggestions function
+const debouncedDishFetchSuggestions = useUtils().debounce(fetchDishSuggestions, 500);
 
 // Method to redirect to search page
 const redirectToSearch = () => {

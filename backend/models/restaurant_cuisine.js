@@ -9,11 +9,11 @@ export default (sequelize, DataTypes) => {
       RestaurantCuisine.belongsTo(models.Cuisine, {
         foreignKey: "cuisine_uuid",
       });
-      RestaurantCuisine.belongsTo(models.Restaurant, {
+      RestaurantCuisine.belongsTo(models.User, {
         foreignKey: "created_by",
         as: "creator", // Alias for the created_by relationship
       });
-      RestaurantCuisine.belongsTo(models.Restaurant, {
+      RestaurantCuisine.belongsTo(models.User, {
         foreignKey: "updated_by",
         as: "updater", // Alias for the updated_by relationship
       });

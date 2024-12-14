@@ -32,13 +32,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      price: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-      },
       image: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       details: {
         type: Sequelize.STRING,
@@ -56,13 +52,23 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
       },
-      has_variant: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
       is_jain: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      created_by: {
+        type: Sequelize.UUID,
+        references: {
+          model: "users", // Name of the User table
+          key: "uuid", // Primary key in the User table
+        },
+      },
+      updated_by: {
+        type: Sequelize.UUID,
+        references: {
+          model: "users", // Name of the User table
+          key: "uuid", // Primary key in the User table
+        },
       },
       created_at: {
         type: Sequelize.DATE,
@@ -81,7 +87,7 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.dropTable("dishes");
   },
 };

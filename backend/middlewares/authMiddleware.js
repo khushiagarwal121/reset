@@ -27,11 +27,6 @@ const authenticate = async (req, res, next) => {
         maxAge: process.env.ACCESS_TOKEN_EXPIRY_COOKIE,
       });
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        maxAge: process.env.REFRESH_TOKEN_EXPIRY_COOKIE,
-      });
-
       req.user_uuid = userId;
       req.current_role_uuid = currentRoleId;
       return next();

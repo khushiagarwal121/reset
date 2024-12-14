@@ -1,3 +1,5 @@
+
+
 <template>
   <div>
     <!-- App bar containing navigation and logo -->
@@ -8,7 +10,6 @@
         @click="toggleDrawer"
       >
       </v-app-bar-nav-icon>
-
       <!-- Tooltip with the food delivery logo linking to home page -->
       <v-tooltip text="Food Delivery">
         <template v-slot:activator="{ props }">
@@ -23,9 +24,7 @@
           </nuxt-link>
         </template>
       </v-tooltip>
-
       <v-spacer></v-spacer>
-
       <!-- Displayed on medium and larger screens for user registration/login -->
       <template v-if="$vuetify.display.mdAndUp">
         <div v-if="!user">
@@ -37,7 +36,6 @@
           >
             {{ item.name }}
           </a>
-
           <!-- Login menu for users to choose their role -->
           <v-menu offset="24" v-model="parentMenu">
             <template v-slot:activator="{ props }">
@@ -49,7 +47,6 @@
                 Login As
               </a>
             </template>
-
             <!-- List of login options based on roles -->
             <v-list class="pa-0">
               <v-list-item
@@ -65,7 +62,6 @@
             </v-list>
           </v-menu>
         </div>
-
         <!-- User-specific menu displayed when a user is logged in -->
         <div v-else>
           <a
@@ -74,11 +70,9 @@
             @click="
               outerArrow = parentMenu ? 'mdi-chevron-down' : 'mdi-chevron-up'
             "
-            ><v-icon class="mr-1">mdi-account-circle</v-icon>
-            {{ user }}
+            ><v-icon class="mr-1">mdi-account-circle</v-icon> {{ user }}
             <v-icon>{{ outerArrow }}</v-icon>
           </a>
-
           <!-- Menu for user profile, settings, and role switching -->
           <v-menu
             offset="24"
@@ -97,7 +91,6 @@
                   userItem
                 }}</v-list-item-title>
               </v-list-item>
-
               <!-- Switch role menu toggle -->
               <v-list-item
                 class="custom-list-item"
@@ -113,7 +106,6 @@
                 <template v-slot:append>
                   <v-icon>{{ innerArrow }}</v-icon>
                 </template>
-
                 <!-- Submenu for switching roles -->
                 <v-menu
                   activator="parent"
@@ -139,7 +131,6 @@
           </v-menu>
         </div>
       </template>
-
       <!-- Displayed on smaller screens for role-based menu (mobile view) -->
       <template v-else>
         <v-menu
@@ -156,7 +147,6 @@
               ><v-icon size="34">mdi-account-circle</v-icon>
             </a>
           </template>
-
           <!-- List of user-specific menu items (Profile, Favorites, etc.) -->
           <v-list class="pa-0">
             <v-list-item
@@ -168,7 +158,6 @@
                 item
               }}</v-list-item-title>
             </v-list-item>
-
             <!-- Switch role item on mobile view -->
             <v-list-item class="custom-list-item">
               <v-list-item-title class="custom-list-item-title"
@@ -177,7 +166,6 @@
               <template v-slot:append>
                 <v-icon>{{ innerArrow }}</v-icon>
               </template>
-
               <!-- Submenu for switching roles on mobile -->
               <v-menu
                 activator="parent"
@@ -201,7 +189,6 @@
             </v-list-item>
           </v-list>
         </v-menu>
-
         <!-- Menu for unauthenticated users with role selection -->
         <v-menu v-else offset="12" @click:outside="isRoleMenu = false">
           <template v-slot:activator="{ props }">
@@ -209,7 +196,6 @@
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
           </template>
-
           <!-- List of signup/login options for unauthenticated users -->
           <v-list
             class="pa-0"
@@ -231,7 +217,6 @@
                   item.name
                 }}</v-list-item-title>
               </v-list-item>
-
               <!-- Menu item for login when user is not authenticated -->
               <v-list-item
                 v-if="!user"
@@ -244,7 +229,6 @@
                 >
               </v-list-item>
             </template>
-
             <!-- List of login options when user wants to select a role -->
             <template v-else>
               <v-list-item
@@ -263,7 +247,6 @@
         </v-menu>
       </template>
     </v-app-bar>
-
     <!-- Drawer for navigation on mobile -->
     <v-navigation-drawer v-model="drawer" temporary>
       <v-list-item
@@ -278,7 +261,6 @@
         }}</v-list-item-title>
       </v-list-item>
     </v-navigation-drawer>
-
     <!-- Dialogs for Login and Signup forms -->
     <LoginForm ref="loginDialog" @switch-to-signup="handleSwitchToSignup" />
     <SignupForm ref="signupDialog" @switch-to-login="handleSwitchToLogin" />
@@ -317,28 +299,55 @@ const outerArrow = ref("mdi-chevron-down");
 const innerArrow = ref("mdi-chevron-left");
 
 // const user = "Username";
-const userItems = ref(["Profile", "Favorites", "Settings", "Logout"]);
+const userItems = computed(() => {
+  const baseItems = ["Dashboard", "Favorites", "Settings", "Logout"];
+  if (role_name.value === "restaurant") {
+    const items = [...baseItems]; // Make a copy of baseItems to avoid modifying the original array
+    items.splice(1, 0, "Profile"); // Insert "Profile" at index 1 (after "Dashboard")
+    items.splice(2, 0, "Menu"); // Insert "Menu" at index 2 (after "Favorites")
+    return items;
+  }
+  return baseItems;
+});
 
+// Handler for "Menu" and "Cuisine"
 function clickHandler(item) {
   outerArrow.value = "mdi-chevron-down";
 
-  if (item === "Profile") {
-    showProfile();
-  } else if (item === "Favorites") {
-    showFavorites();
-  } else if (item === "Settings") {
-    openSettings();
-  } else if (item === "Logout") {
-    logout();
+  switch (item) {
+    case "Dashboard":
+      showDashboard();
+      break;
+    case "Profile":
+      showProfile();
+      break;
+    case "Favorites":
+      showFavorites();
+      break;
+    case "Menu":
+      showMenu(); //for managing menu in restaurant
+      break;
+    case "Settings":
+      openSettings();
+      break;
+    case "Logout":
+      logout();
+      break;
+    default:
+      console.error("Unhandled menu item:", item);
   }
 }
 
-function showProfile() {
+function showDashboard() {
   const entity =
     store.getters["auth/currentRole"] === "delivery_partner"
       ? "delivery_partner"
       : store.getters["auth/currentRole"];
   navigateTo(`/${entity}/dashboard`);
+}
+
+function showProfile() {
+  navigateTo("/restaurant/profile");
 }
 
 function showFavorites() {
@@ -353,6 +362,9 @@ async function logout() {
   console.log("Logging out...");
   await store.dispatch("auth/logoutUser");
   navigateTo("/");
+}
+function showMenu() {
+  navigateTo("/restaurant/menu");
 }
 
 // const selectedButton = ref(null); // Track the selected button

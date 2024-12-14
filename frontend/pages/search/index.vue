@@ -5,23 +5,38 @@
       <v-row class="d-flex justify-center">
         <!-- Location Search -->
         <v-col cols="3" class="pa-0">
-          <v-text-field
-            label="Search by location"
+          <v-combobox
             v-model="searchLocation"
-            clearable
+            label="Search by location"
             variant="solo"
+            clearable
             prepend-inner-icon="mdi-map-marker"
+            :items="autoCompleteResults"
+            @input="debouncedFetchSuggestions()"
+            @keydown.enter="selectFirstItem"
+            item-title="name"
+            item-value="city"
+            :open-on-focus="true" 
+            no-data-text="No data available"
+            :hide-no-data="false"
           />
         </v-col>
-
         <!-- Name/Dish Search -->
         <v-col cols="5" class="pa-0">
-          <v-text-field
-            label="Search by restaurant name or dish"
+          <v-combobox
             v-model="searchQuery"
+            label="Search by restaurant name or dish"
             variant="filled"
             clearable
-          />
+            :items="autoCompleteDishResults"
+            @input="debouncedDishFetchSuggestions()"
+            item-title="name"
+            item-value="uuid"
+            :open-on-focus="true"
+            no-data-text="No restaurants or dishes found"
+            :hide-no-data="false"
+          >
+          </v-combobox>
         </v-col>
       </v-row>
     </v-container>
@@ -81,6 +96,7 @@
           <v-autocomplete
             v-model="selectedCuisine"
             :items="cuisines"
+            item-title="name"
             label="Type to search"
             clearable
             solo
@@ -127,8 +143,6 @@
 </template>
 
 <script>
-import { cuisineOptions } from "@/assets/data/cuisineOptions";
-
 export default {
   data() {
     return {
@@ -138,8 +152,10 @@ export default {
       isPureVeg: false,
       isJain: false,
       dialog: false, // Controls dialog visibility
-      cuisines: cuisineOptions, // List of cuisines
+      cuisines: [], // List of cuisines
       selectedCuisine: [], // Stores selected cuisine
+      autoCompleteResults: [],
+      autoCompleteDishResults:[],
       restaurants: [
         { id: 1, name: "The Spice House", cuisine: ["North Indian", "Burger"] },
         { id: 2, name: "Green Garden Cafe", cuisine: ["South Indian"] },
@@ -163,11 +179,77 @@ export default {
     selectJain() {
       this.isJain = !this.isJain;
     },
+    getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          await this.$store.dispatch("search/getCurrentLocation", {
+            lat: latitude,
+            lon: longitude,
+          });
+          this.searchLocation = this.$store.getters["search/getLocation"];
+        });
+        return;
+      }
+    },
+    async fetchLocationSuggestions() {
+      if (this.searchLocation.trim() !== "") {
+        await this.$store.dispatch(
+          "search/fetchLocationSuggestions",
+          this.searchLocation
+        );
+        this.autoCompleteResults = await this.$store.getters[
+          "search/getAutoCompleteResults"
+        ];
+      }
+      else{
+        this.autoCompleteResults = []
+      }
+    },
+    async fetchDishSuggestions() {
+      if (this.searchQuery.trim() !== "") {
+        await this.$store.dispatch(
+          "search/fetchDishSuggestions",
+          this.searchQuery
+        );
+        this.autoCompleteDishResults = this.$store.getters[
+          "search/getAutoCompleteDishResults"
+        ];
+      }
+      else{
+        this.autoCompleteDishResults = []
+      }
+    },
+    // Action to load cuisines when the DOM is rendered
+    async loadCuisines() {
+      let cuisines = await this.$store.getters["cuisine/cuisines"];
+
+      if (cuisines.length === 0) {
+        cuisines = await this.$store.dispatch("cuisine/fetchCuisines"); // Fetch cuisines via Vuex action
+      }
+      this.cuisines = cuisines; // Assign to local data
+    },
+    selectFirstItem() {
+      if (this.autoCompleteResults.length > 0) {
+        this.searchLocation = this.autoCompleteResults[0];
+      }
+    },
   },
   mounted() {
     // Load query params into the searchQuery field
     const route = useRoute();
     this.searchQuery = route.query.q || "";
+    this.getLocation(); // get location when app is mounted
+    this.loadCuisines(); // get cuisines on app mount
+  },
+  created() {
+    // Wrap fetchLocationSuggestions with debounce
+    this.debouncedFetchSuggestions = useUtils().debounce(
+      this.fetchLocationSuggestions,
+      500
+    );
+    this.debouncedDishFetchSuggestions = useUtils().debounce(this.fetchDishSuggestions,500)
   },
 };
 </script>

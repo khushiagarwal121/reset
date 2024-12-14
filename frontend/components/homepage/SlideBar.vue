@@ -1,15 +1,19 @@
 <template>
-  <!-- Main container for the sliding carousel -->
   <v-sheet width="75%" class="pt-2 pb-2">
-    <v-slide-group>
-      <!-- Iterate over the items prop to display each item in the carousel -->
-      <v-slide-group-item v-for="item in items" :key="item.title">
+    <v-slide-group show-arrows>
+      <v-slide-group-item v-for="item in items" :key="item.name">
         <div class="d-flex flex-column justify-center align-center">
           <v-card width="140px" height="140px" class="ml-5 mr-5 rounded-circle">
-            <!-- Dynamically load image based on the item's title -->
-            <img :src="`/image/${item.title}.png`" class="image" />
+            <img
+              :src="
+                item.image
+                  ? `http://localhost:8000/uploads/categories/${item.image}`
+                  : `/image/${item.name}.png`
+              "
+              class="image"
+            />
           </v-card>
-          <p class="text-h6">{{ item.title }}</p>
+          <p class="text-h6 mt-1">{{ item.name }}</p>
         </div>
       </v-slide-group-item>
     </v-slide-group>
@@ -18,7 +22,12 @@
 
 <script>
 export default {
-  props: ["items"],
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
+  },
 };
 </script>
 
